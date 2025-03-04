@@ -4,21 +4,21 @@
     const Dish = require('./models/dish');
     const Order = require('./models/order');
 const cookieParser = require('cookie-parser');
-// const cors = require("cors");
+const cors = require("cors");
 const { userAuth } = require('./middlewares/userAuth');
 const authRouter = require('./routes/Auth');
 require('dotenv').config()
     const app = express();
     app.use(express.json());
     app.use(cookieParser());
-    // app.use(
-    //     cors({
-    //         origin: "http://localhost:4000", 
-    //         credentials: true, 
-    //         methods: "GET,POST,PUT,DELETE", 
-    //         allowedHeaders: "Content-Type,Authorization", 
-    //     })
-    // );
+    app.use(
+        cors({
+            origin: "*", 
+            credentials: true, 
+            methods: "GET,POST,PUT,DELETE", 
+            allowedHeaders: "Content-Type,Authorization", 
+        })
+    );
  app.use("/", authRouter);
 
 app.post('/orders', userAuth, async (req, res) => {
