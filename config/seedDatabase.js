@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
-const Dish = require('../../models/dish.js');
-const dishes = require('../../data/data.js'); 
+const Dish = require('../models/dish.js');
+const dishes = require('../data/data.js'); 
 MONGODB_URI = process.env.MONGODB_URI;
 async function seedDatabase() {
     try {
