@@ -39,7 +39,6 @@ authRouter.post('/login', async (req, res) => {
         const { email, password } = req.body;
         console.log("Login attempt for email:", email);
 
-        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
             console.log("User not found!");
@@ -48,7 +47,6 @@ authRouter.post('/login', async (req, res) => {
 
         console.log("User found:", user);
 
-        // Validate password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         console.log("Password validation result:", isPasswordValid);
 
@@ -57,19 +55,18 @@ authRouter.post('/login', async (req, res) => {
             return res.status(400).json({ message: "Incorrect password." });
         }
 
-        // Generate JWT token
-       
         const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_KEY, { expiresIn: "1d" });
         console.log("JWT Token generated:", token);
 
-    
         res.cookie("token", token, {
             httpOnly: true,  
-            secure: "false", 
+            secure: true,   // Must be true if using SameSite=None
             sameSite: "None",
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
+            maxAge: 24 * 60 * 60 * 1000 
         });
-        res.status(200).json({ message: "Login successful!" ,});
+
+        res.status(200).json({ message: "Login successful!", token });
+
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({ message: "Server error. Please try again later." });
