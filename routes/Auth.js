@@ -13,7 +13,7 @@ authRouter.post('/signup', async(req, res)=>{
         if(isUserDataSafe){
             const {email, password, firstName, lastName} = req.body;
             // const hashedPassword =await bcrypt.hash(password, 10);
-             
+              
             const userObject = {
                 firstName, 
                 lastName,
@@ -65,7 +65,13 @@ authRouter.post('/login', async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000 
         });
 
-        res.status(200).json({ message: "Login successful!", token });
+        res.status(200).json({ 
+            message: "Login successful!",
+            data: {
+                token,
+                firstName: user.firstName
+            }
+        });
 
     } catch (error) {
         console.error("Login Error:", error);
